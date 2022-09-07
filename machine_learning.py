@@ -16,7 +16,6 @@ new_text = new_text.lower()
 arr = []
 arr = new_text.split()
 d = dict()
-print(arr)
 
 for i in range(len(arr) - n):
     p = 0
@@ -25,13 +24,16 @@ for i in range(len(arr) - n):
         tmp.append(arr[p+i])
         p += 1
     if (tuple(tmp) in d):
-        print(tmp, arr[i+n])
-        print(i + n + 1)
         word = arr[i + n]
-        if (word in d[tuple(tmp)]):
-            d[tuple(tmp)] = [d[tuple(tmp)][0][0] ,d[tuple(tmp)][0][1] + 1]
-        else:
-            print('find!!!!!', tmp)
+        flag = False
+        index = 0
+        for w in d[tuple(tmp)]:
+            if (word in w):
+                d[tuple(tmp)][index] = [d[tuple(tmp)][index][0] ,d[tuple(tmp)][index][1] + 1]
+                flag = True
+                break
+            index += 1
+        if (flag == False):
             d[tuple(tmp)].append([arr[i + n], 1])
     else:
         d[tuple(tmp)] = [(arr[i + n], 1)]
