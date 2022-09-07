@@ -37,7 +37,17 @@ for i in range(len(arr) - n):
             d[tuple(tmp)].append([arr[i + n], 1])
     else:
         d[tuple(tmp)] = [(arr[i + n], 1)]
-        #d[tuple(tmp)].append([arr[i + n + 1], 1])
-#сделать обработку 2 префикса и несколько значений
+#print(d)
+
+for gram in d:
+    value = 0
+    #print(gram)
+    for words in d[gram]:
+        #print(words[1])
+        value += words[1]
+    index = 0
+    for words in d[gram]:
+        d[gram][index] = [d[tuple(gram)][index][0] , int(d[tuple(gram)][index][1]) / value]
+        index += 1
 
 print(d)
