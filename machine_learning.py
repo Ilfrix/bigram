@@ -1,7 +1,7 @@
 import numpy as np
 import random as rand
 text = ''
-with open("text.txt") as f:
+with open("text2.txt", 'r', encoding='utf-8') as f:
     for line in f:
         text += line[:len(line)-1] + ' '
         #text += line
@@ -52,18 +52,15 @@ for gram in d:
         d[gram][index] = [d[tuple(gram)][index][0] , int(d[tuple(gram)][index][1]) / value]
         index += 1
 
-for gram in d:
-    index = 0
-    for words in d[gram]:
-        pass
-        #index += 1
 #print(np.random.choice([(0,1), (1,2), (2,3)]))
 value_words = 0
 #print(d)
+print('Enter two words')
 first_word, second_word = map(str, input().split())
 k = (first_word, second_word)
 res = first_word + ' ' + second_word
-while value_words < 10:
+value_words_end = 100
+while value_words < value_words_end:
     index = 0
     r = rand.random()
     flag = False
