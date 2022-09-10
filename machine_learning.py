@@ -1,16 +1,14 @@
-import numpy as np
 import random as rand
 text = ''
 with open("text2.txt", 'r', encoding='utf-8') as f:
     for line in f:
         text += line[:len(line)-1] + ' '
-        #text += line
-#n = int(input())
 n = 2
 new_text = ''
 for i in range(len(text)):
     k = ord(text[i])
-    if (k in range(65, 91) or k in range(97,122) or k in range(1040, 1104) or text[i] == '.'):
+    #можно добавить точку в условие ниже
+    if (k in range(65, 91) or k in range(97,122) or k in range(1040, 1104)):
         new_text += text[i]
     else:
         new_text += ' '
@@ -39,22 +37,23 @@ for i in range(len(arr) - n):
             d[tuple(tmp)].append([arr[i + n], 1])
     else:
         d[tuple(tmp)] = [(arr[i + n], 1)]
-#print(d)
 
 for gram in d:
     value = 0
-    #print(gram)
     for words in d[gram]:
-        #print(words[1])
         value += words[1]
     index = 0
     for words in d[gram]:
         d[gram][index] = [d[tuple(gram)][index][0] , int(d[tuple(gram)][index][1]) / value]
         index += 1
 
-#print(np.random.choice([(0,1), (1,2), (2,3)]))
+#запись модели в файл
 value_words = 0
-#print(d)
+with open('result.txt', 'w', encoding='utf-8') as f:
+    f.write("NEW_VERSION\n")
+    for gram in d:
+        tmp = str(gram) + " : " + str(d[gram]) + '\n'
+        f.write(tmp)
 print('Enter two words')
 first_word, second_word = map(str, input().split())
 k = (first_word, second_word)
@@ -70,6 +69,7 @@ while value_words < value_words_end:
             k = (k[1], d[k][index][0])
             res += ' ' + d[k][index][0]
             flag = True
+            break
         else:
             cur_v += d[k][index][1]
     if (flag == False):
@@ -78,4 +78,3 @@ while value_words < value_words_end:
         index += 1
     value_words += 1
 print(res)
-#print(d)
