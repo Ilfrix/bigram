@@ -1,49 +1,49 @@
 import pickle
 import random as rand
 import argparse
+from train_process import model_gram
 
-def generate_text(model_path, length, prefix) -> str:
-    d = dict()
-    
-    with open(model_path, 'rb') as f:
-        d = pickle.load(f)
-    if (prefix == ()):
-        r = rand.randint(0,1000)
-        t = 0
+class model_generate(model_gram):
+    def generate(model_path, length, prefix) -> str:
+        d = dict()
         
-        for bigram in d:    
-            t += 1
-            if (t == r):
-                prefix = bigram
-    print(prefix)
-    #сделать префикс вариативным
-    #prefix = ('мы', 'будем')
-    value_words = 0
-    res = prefix[0] + ' ' + prefix[1]
+        with open(model_path, 'rb') as f:
+            d = pickle.load(f)
+        if (prefix == ()):
+            r = rand.randint(0,1000)
+            t = 0
+            
+            for bigram in d:    
+                t += 1
+                if (t == r):
+                    prefix = bigram
+                    break
+        value_words = 0
+        res = prefix[0] + ' ' + prefix[1]
 
-    while value_words < length:
-        index = 0
-        r = rand.random()
-        flag = False
-        
-        for i in d[prefix]:
-            cur_v = d[prefix][index][1]
-            if (r < cur_v):
+        while value_words < length:
+            index = 0
+            r = rand.random()
+            flag = False
+            
+            for i in d[prefix]:
+                cur_v = d[prefix][index][1]
+                if (r < cur_v):
+                    res += ' ' + d[prefix][index][0]
+                    prefix = (prefix[1], d[prefix][index][0])
+                    flag = True
+                    break
+                else:
+                    cur_v += d[prefix][index][1]
+                    index += 1
+
+            if (flag == False):
+                index -= 1
                 res += ' ' + d[prefix][index][0]
                 prefix = (prefix[1], d[prefix][index][0])
-                flag = True
-                break
-            else:
-                cur_v += d[prefix][index][1]
-                index += 1
-
-        if (flag == False):
-            index -= 1
-            res += ' ' + d[prefix][index][0]
-            prefix = (prefix[1], d[prefix][index][0])
-        value_words += 1
-        
-    return res
+            value_words += 1
+            
+        return res
     
 def main_generate(args):
     if (args == ()):
@@ -55,7 +55,8 @@ def main_generate(args):
     prefix = tuple(args.prefix.split())
     length = args.length
     model = args.model
-    s = generate_text(model, length, prefix)
+    s = model_generate()
+    s = s.generate(model, length, prefix)
     print(s)
     j = input('Enter something and press enter for closing')
 
